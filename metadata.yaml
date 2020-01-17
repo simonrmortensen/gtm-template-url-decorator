@@ -1,6 +1,6 @@
 homepage: "https://www.linkedin.com/in/simonrmortensen/"
-documentation: "https://github.com/simonrmortensen/gtm-template-url-parser"
+documentation: "https://github.com/simonrmortensen/gtm-template-url-decorator"
 versions:
 # Current version
-  - sha: x
+  - sha: a3dbb459e86097f3d2da0e74c007c2fcc9189f1b
     changeNotes: Initial Release. 
