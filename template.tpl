@@ -136,7 +136,7 @@ catch(error) {
 function keyExists(key) {
   const fullKey = key + "=";
   const inOriginalQueries = queries.indexOf(fullKey) != -1;
-  const alreadyAppended = addQueries.filter(x => x.indexOf(fullKey) == 0).length > 0;
+  const alreadyAppended = addQueries.some(x => x.indexOf(fullKey) == 0);
   return inOriginalQueries || alreadyAppended;
 }
 
