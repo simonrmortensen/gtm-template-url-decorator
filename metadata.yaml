@@ -2,7 +2,7 @@ homepage: "https://www.linkedin.com/in/simonrmortensen/"
 documentation: "https://github.com/simonrmortensen/gtm-template-url-decorator"
 versions:
 # Current version
-  - sha: bc0543dc02cd4d7efe7d8ac533269d0428faaddf
+  - sha: 858bae017c32cb339552a359ea6f3050533b88ad
     changeNotes: Update to support dictionaries with nested dictionaries as parameters. 
 
 # Old versions
