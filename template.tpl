@@ -103,15 +103,7 @@ if (data.hardQueryParams){
 if (data.dictionaryQueryParams) { 
   const dictionaries = data.dictionaryQueryParams.map(x => x.queryDictionary);
   dictionaries.forEach(dictionary => {
-    if (typeof dictionary == "object") {
-      for (let key in dictionary) {
-        // If URL input queries already contains key, or the value of the key is not a primitive data type, skipping this item. 
-        const approvedTypes = ["string", "number", "boolean"];
-        if (!keyExists(key) && approvedTypes.indexOf(typeof dictionary[key]) != -1) {
-          addQueries.push(encode(key) + "=" + encode(dictionary[key].toString()));
-        }
-      }
-    }
+    extractPairs(dictionary);
   });
 }
 
@@ -138,6 +130,24 @@ function keyExists(key) {
   const inOriginalQueries = queries.indexOf(fullKey) != -1;
   const alreadyAppended = addQueries.some(x => x.indexOf(fullKey) == 0);
   return inOriginalQueries || alreadyAppended;
+}
+
+function extractPairs(dict) {
+  if (typeof dict != "object") { return; }
+
+  for (let key in dict) {
+    // If URL input queries already contains key, or the value of the key is not a primitive data type, skipping this item. 
+    const approvedTypes = ["string", "number", "boolean"];
+    if (!keyExists(key) && approvedTypes.indexOf(typeof dict[key]) != -1) {
+      addQueries.push(encode(key) + "=" + encode(dict[key].toString()));
+    }
+
+    if(!keyExists(key) && typeof dict[key] == "object") {
+      extractPairs(dict[key]);
+    }
+
+  }
+
 }
 
 
