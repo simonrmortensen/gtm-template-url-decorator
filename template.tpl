@@ -140,14 +140,10 @@ function extractPairs(dict) {
     const approvedTypes = ["string", "number", "boolean"];
     if (!keyExists(key) && approvedTypes.indexOf(typeof dict[key]) != -1) {
       addQueries.push(encode(key) + "=" + encode(dict[key].toString()));
-    }
-
-    if(!keyExists(key) && typeof dict[key] == "object") {
+    } else {
       extractPairs(dict[key]);
     }
-
   }
-
 }
 
 
