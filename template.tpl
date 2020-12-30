@@ -77,35 +77,36 @@ ___TEMPLATE_PARAMETERS___
 ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
 
 // Enter your template code here.
-const log = require('logToConsole');
+// const print = require('logToConsole');
 const getURL = require("getUrl");
 const encode = require("encodeUriComponent");
 const encoder = require("encodeUri");
 
 const url = getURL("protocol") + "://" + getURL("host") + getURL("path");
 const queries = data.stripOriginalQueries ? "" : getURL("query");
-// log(queries);
 
 let addQueries = [];
 
-// try {
-// Add query parameters from hard entry
-if (data.hardQueryParams){
-  data.hardQueryParams.forEach(query => {
-    // If URL input queries already contains key, skipping this query. 
-    if (!keyExists(query.key)) {
-      addQueries.push(encode(query.key) + "=" + encode(query.value));
-    }
-  });
-}
+const hardQueries = (data.hardQueryParams || []).reduce((agg, current) => {
+  agg[current.key] = current.value;
+  return agg;
+}, {});
 
-// Add query parameters from input Dictionary
-if (data.dictionaryQueryParams) { 
-  const dictionaries = data.dictionaryQueryParams.map(x => x.queryDictionary);
-  dictionaries.forEach(dictionary => {
-    extractPairs(dictionary);
-  });
-}
+const dict = (data.dictionaryQueryParams || []).reduce((agg, current, index) => {
+  agg[index] = current;
+  return agg;
+}, {});
+
+addPairs(hardQueries);
+addPairs(dict);
+
+addQueries = addQueries.filter((param, currentIndex) => { 
+  // Remove duplicated parameters, if any. 
+  const key = param.split("=")[0];
+  const inOriginalQueries = queries.indexOf(key) !== -1;
+  const alreadyAppended = addQueries.slice(0, currentIndex).some(prev => prev.split("=")[0] === key);
+  return !(inOriginalQueries || alreadyAppended);
+});
 
 // Variables must return a value.
 const separator = queries ? "&" : "?";
@@ -113,35 +114,17 @@ const originalQueries = queries ? "?" + queries : "";
 const appendQueries = addQueries.length ? separator + addQueries.join("&") : "" ;
 return encoder(url + originalQueries + appendQueries);
 
-/*
-}
-catch(error) {
-  log("Template Error - URL Decorator - Query Parameters: ");
-  log(error.message);
-
-  // Fallback return statement in case of error. Full URL. 
-  return getURL();
-}
-*/
-
 // Helper functions
-function keyExists(key) {
-  const fullKey = key + "=";
-  const inOriginalQueries = queries.indexOf(fullKey) != -1;
-  const alreadyAppended = addQueries.some(x => x.indexOf(fullKey) == 0);
-  return inOriginalQueries || alreadyAppended;
-}
-
-function extractPairs(dict) {
-  if (typeof dict != "object") { return; }
-
+function addPairs(dict) {
+  if (typeof dict !== "object") { return; }
+  
   for (let key in dict) {
     // If URL input queries already contains key, or the value of the key is not a primitive data type, skipping this item. 
     const approvedTypes = ["string", "number", "boolean"];
-    if (!keyExists(key) && approvedTypes.indexOf(typeof dict[key]) != -1) {
+    if (approvedTypes.indexOf(typeof dict[key]) !== -1) {
       addQueries.push(encode(key) + "=" + encode(dict[key].toString()));
     } else {
-      extractPairs(dict[key]);
+      addPairs(dict[key]);
     }
   }
 }
