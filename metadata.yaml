@@ -2,10 +2,13 @@ homepage: "https://www.linkedin.com/in/simonrmortensen/"
 documentation: "https://github.com/simonrmortensen/gtm-template-url-decorator"
 versions:
 # Current version
-  - sha: 858bae017c32cb339552a359ea6f3050533b88ad
-    changeNotes: Update to support dictionaries with nested dictionaries as parameters. 
+  - sha: 6beacdc0b0c7751dc99488be38a9b9252da4afc5
+    changeNotes: Optimization of template code and UI clarity
 
 # Old versions
+  - sha: 858bae017c32cb339552a359ea6f3050533b88ad
+    changeNotes: Update to support dictionaries with nested dictionaries as parameters. 
+    
   - sha: 42ab8ab9116214bfbc03dccfcff87e83028c1a9b
     changeNotes: Minor code optimizintion. 
     
