@@ -2,7 +2,7 @@ homepage: "https://www.linkedin.com/in/simonrmortensen/"
 documentation: "https://github.com/simonrmortensen/gtm-template-url-decorator"
 versions:
 # Current version
-  - sha: 1ce03311cbfc40533c0fc20b46a2dc7207149478
+  - sha: 01fe95ce5d3c5bb4c584791790e70c4409c324d5
     changeNotes: Optimization of template code and UI clarity
 
 # Old versions
