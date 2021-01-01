@@ -77,7 +77,7 @@ ___TEMPLATE_PARAMETERS___
 ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
 
 // Enter your template code here.
-// const print = require('logToConsole');
+const print = require('logToConsole');
 const getURL = require("getUrl");
 const encode = require("encodeUriComponent");
 const encoder = require("encodeUri");
@@ -85,28 +85,20 @@ const encoder = require("encodeUri");
 const url = getURL("protocol") + "://" + getURL("host") + getURL("path");
 const queries = data.stripOriginalQueries ? "" : getURL("query");
 
-let addQueries = [];
+const addQueries = [];
 
 const hardQueries = (data.hardQueryParams || []).reduce((agg, current) => {
   agg[current.key] = current.value;
   return agg;
 }, {});
 
-const dict = (data.dictionaryQueryParams || []).reduce((agg, current, index) => {
+const dicts = (data.dictionaryQueryParams || []).reduce((agg, current, index) => {
   agg[index] = current;
   return agg;
 }, {});
 
-addPairs(hardQueries);
-addPairs(dict);
-
-addQueries = addQueries.filter((param, currentIndex) => { 
-  // Remove duplicated parameters, if any. 
-  const key = param.split("=")[0];
-  const inOriginalQueries = queries.indexOf(key) !== -1;
-  const alreadyAppended = addQueries.slice(0, currentIndex).some(prev => prev.split("=")[0] === key);
-  return !(inOriginalQueries || alreadyAppended);
-});
+addPairs(hardQueries, addQueries);
+addPairs(dicts, addQueries);
 
 // Variables must return a value.
 const separator = queries ? "&" : "?";
@@ -115,20 +107,26 @@ const appendQueries = addQueries.length ? separator + addQueries.join("&") : "" 
 return encoder(url + originalQueries + appendQueries);
 
 // Helper functions
-function addPairs(dict) {
-  if (typeof dict !== "object") { return; }
+function addPairs(fromDict, toList) {
+  if (typeof fromDict !== "object") { return; }
   
-  for (let key in dict) {
+  for (let key in fromDict) {
     // If URL input queries already contains key, or the value of the key is not a primitive data type, skipping this item. 
-    const approvedTypes = ["string", "number", "boolean"];
-    if (approvedTypes.indexOf(typeof dict[key]) !== -1) {
-      addQueries.push(encode(key) + "=" + encode(dict[key].toString()));
+    const isApprovedType = ["string", "number", "boolean"].indexOf(typeof fromDict[key]) !== -1;
+    const isDuplicate = ((keyName, queryList) => {
+      // Remove duplicated parameters, if any. 
+      const inOriginalQueries = queries.indexOf(keyName + "=") !== -1;
+      const alreadyAppended = queryList.some(prev => prev.split("=")[0] === keyName);
+      return inOriginalQueries || alreadyAppended;
+    })(key, toList);
+        
+    if (isApprovedType && !isDuplicate) {
+      addQueries.push(encode(key) + "=" + encode(fromDict[key].toString()));
     } else {
-      addPairs(dict[key]);
+      addPairs(fromDict[key]);
     }
   }
 }
-
 
 ___WEB_PERMISSIONS___
 
