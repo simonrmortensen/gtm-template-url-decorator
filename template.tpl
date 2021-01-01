@@ -1,11 +1,3 @@
-﻿___TERMS_OF_SERVICE___
-
-By creating or modifying this file you agree to Google Tag Manager's Community
-Template Gallery Developer Terms of Service available at
-https://developers.google.com/tag-manager/gallery-tos (or such other URL as
-Google may provide), as modified from time to time.
-
-
 ___INFO___
 
 {
@@ -13,12 +5,14 @@ ___INFO___
   "id": "cvt_temp_public_id",
   "version": 1,
   "securityGroups": [],
-  "displayName": "URL Decorator - Query Parameters",
+  "displayName": "URL Decorator - Query Parameters [UNPUBLISHED]",
   "description": "Input the desired query parameter keys and values, or JS-object (dictionaries) with such parameters, to decorate the current URL with, into this variable template.",
   "containerContexts": [
     "WEB"
-  ], 
-  "categories": ["UTILITY"]
+  ],
+  "categories": [
+    "UTILITY"
+  ]
 }
 
 
@@ -50,17 +44,17 @@ ___TEMPLATE_PARAMETERS___
   {
     "type": "SIMPLE_TABLE",
     "name": "dictionaryQueryParams",
-    "displayName": "Add Query Parameters from dictionary variable",
+    "displayName": "Add Query Parameters from JS-object variable",
     "simpleTableColumns": [
       {
         "defaultValue": "",
-        "displayName": "Dictionaries",
-        "name": "queryDictionary",
+        "displayName": "JS-objects (Dictionaries)",
+        "name": "query_js_object",
         "type": "TEXT"
       }
     ],
-    "newRowButtonText": "Add Query Parameter Dictionary variable",
-    "help": "In this table, add dictionary variables which contain key-value pairs representing query parameters ( \u003cstrong\u003e{\"query\":\"parameter\"}\u003c/strong\u003e )."
+    "newRowButtonText": "Add Key/Value JS-object variable",
+    "help": "In this table, add JS-object variables which contain key-value pairs representing query parameters ( \u003cstrong\u003e{\"query\":\"parameter\"}\u003c/strong\u003e )."
   },
   {
     "type": "CHECKBOX",
@@ -128,27 +122,10 @@ function addPairs(fromDict, toList) {
   }
 }
 
+
 ___WEB_PERMISSIONS___
 
 [
-  {
-    "instance": {
-      "key": {
-        "publicId": "logging",
-        "versionId": "1"
-      },
-      "param": [
-        {
-          "key": "environments",
-          "value": {
-            "type": 1,
-            "string": "debug"
-          }
-        }
-      ]
-    },
-    "isRequired": true
-  },
   {
     "instance": {
       "key": {
@@ -168,6 +145,24 @@ ___WEB_PERMISSIONS___
           "value": {
             "type": 1,
             "string": "any"
+          }
+        }
+      ]
+    },
+    "isRequired": true
+  },
+  {
+    "instance": {
+      "key": {
+        "publicId": "logging",
+        "versionId": "1"
+      },
+      "param": [
+        {
+          "key": "environments",
+          "value": {
+            "type": 1,
+            "string": "debug"
           }
         }
       ]
